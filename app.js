@@ -59,4 +59,15 @@ io.sockets.on('connection', function(socket) {
   });
 
   io.sockets.emit('stats', {total: clients.length});
+
+  socket.on('start', function(data){
+
+  });
+
+  socket.on('restart', function(data){
+    io.socket.emit('wave', {command: 'reset', color: 'white'});
+    clients = null;
+    clients = [];
+    io.sockets.emit('stats', {total: clients.length});
+  });
 });

@@ -133,4 +133,36 @@ body {
 #remote-container div{
   width:100%;
   height:33%;
+  position:relative;
+}
+#remote-container div span{
+  color:#fff;
+  font-size: 2em;
+  position: absolute;
+  text-align: center;
+  bottom: 20px;
+  width: 100%;
+}
+#remote-container div#play{
+  background:url('/images/play.png') no-repeat center center #C2231C;
+}
+
+#remote-container div#play:hover{
+  background:url('/images/play.png') no-repeat center center  #C26E77;
+}
+
+#remote-container div#reset{
+  background:url('/images/reload.png') no-repeat center center #D9AC34;
+}
+
+#remote-container div#reset:hover{
+  background:url('/images/reload.png') no-repeat center center  #D9BB8A;
+}
+
+#remote-container div#information{
+  background: #FFFEEA;
+}
+
+#remote-container div#information span{
+  color:#333;
 }
