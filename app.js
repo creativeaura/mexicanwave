@@ -8,7 +8,11 @@ var express = require('express')
 
 var app = module.exports = express.createServer(express.logger());
 
+var io = require('socket.io').listen(app);
+
 var port = process.env.PORT || 3000;
+
+var clients = [];
 
 // Configuration
 
@@ -25,6 +29,12 @@ app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 2);
+});
+
+
 app.configure('production', function(){
   app.use(express.errorHandler());
 });
@@ -32,8 +42,21 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/remote/', routes.session);
+app.get('/remote', routes.remote);
 
-app.listen(3000, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+app.listen(port, function(){
+  console.log("Express server listening on port %d in %s mode", port, app.settings.env);
+});
+
+io.sockets.on('connection', function(socket) {
+  socket.on('newscreen', function(data){
+    clients.push(socket);
+
+    console.log('New Screen request');
+    console.log('Total Screens attached %d', clients.length);
+
+    socket.emit('s2c', {message: 'Connected'});
+  });
+
+  io.sockets.emit('stats', {total: clients.length});
 });

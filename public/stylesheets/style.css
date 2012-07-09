@@ -123,3 +123,14 @@ body {
   font-size: 18px;
   text-align: center;
 }
+
+
+#remote-container{
+  font-family: 'Pontano Sans', sans-serif;
+  height: 100%;
+}
+
+#remote-container div{
+  width:100%;
+  height:33%;
+}
