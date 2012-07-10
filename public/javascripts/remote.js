@@ -4,6 +4,7 @@
 
 	$('#play').on('touchstart click', function(event){
 		socket.emit('start', {});
+		$('#information span').html('Starting Wave');
 	});
 
 	$('#reset').on('touchstart click', function(event){
