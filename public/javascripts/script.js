@@ -13,14 +13,18 @@
   });
 
   socket.on('wave', function(data) {
+    console.log(data);
     if (data.command === 'go-go-go') {
       $('#main').animate({
         backgroundColor: data.color
       }, 1000);
+      $('#status').html('');
     } else if(data.command === 'reset') {
       $('#main').animate({
         backgroundColor: data.color
       }, 100);
+
+      $('#status').html('reload the page again.');
     }
   });
 
