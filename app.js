@@ -4,8 +4,8 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
-
+  , routes = require('./routes')
+  , _ = require('underscore')._;
 var app = module.exports = express.createServer(express.logger());
 
 var io = require('socket.io').listen(app);
@@ -48,26 +48,42 @@ app.listen(port, function(){
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 });
 
+// Listening to new connections.
 io.sockets.on('connection', function(socket) {
+  // Listtening for new screen to be attached
   socket.on('newscreen', function(data){
+    // Add screen to clients array
     clients.push(socket);
-
     console.log('New Screen request');
     console.log('Total Screens attached %d', clients.length);
-
+    //Send screen a confirm message.
     socket.emit('s2c', {message: 'Connected'});
   });
-
+  
+  //broadcast the stats for no. of connected screens.
   io.sockets.emit('stats', {total: clients.length});
 
+  // Listening for start wave command from remote
   socket.on('start', function(data){
-
+    var i = 1;
+    _.each(clients, function(client) {
+      setTimeout(function(){
+        sendWaveCommand(client);
+      }, 2000 + i);
+      i += 300;
+    });
   });
 
   socket.on('restart', function(data){
-    io.socket.emit('wave', {command: 'reset', color: 'white'});
+    _.each(clients, function(client) {
+      client.emit('wave', {command: 'reset', color:'white'});
+    });
     clients = null;
     clients = [];
     io.sockets.emit('stats', {total: clients.length});
   });
 });
+
+function sendWaveCommand(client) {
+  client.emit('wave', {command: 'go-go-go', color:'red'});
+}
